@@ -339,8 +339,8 @@ export const AuthProvider = ({ children }) => {
             // 3. Delete the profile row
             await supabase.from('profiles').delete().eq('id', user.id);
 
-            // 4. Attempt RPC deletion (may not exist — that's fine)
-            await supabase.rpc('delete_user').catch(() => { });
+            // 4. Attempt RPC deletion — ignore if function doesn't exist in Supabase
+            try { await supabase.rpc('delete_user'); } catch (_) { /* not set up — that's ok */ }
 
             // 5. Always sign out — ensures the session is cleared
             await supabase.auth.signOut();
