@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Radio, Camera, Bell, X } from 'lucide-react';
 
@@ -29,6 +30,7 @@ export default function NotificationToast({ notification, onClose }) {
         }, 5000);
 
         return () => clearTimeout(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const Icon = icons[notification?.type] || Bell;

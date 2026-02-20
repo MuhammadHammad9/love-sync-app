@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const TabPanel = ({ active, children, className = "" }) => {
     const [hasVisited, setHasVisited] = useState(active);
 
-    useEffect(() => {
-        if (active && !hasVisited) setHasVisited(true);
-    }, [active, hasVisited]);
+    if (active && !hasVisited) { setHasVisited(true); }
 
     if (!hasVisited) return null;
 

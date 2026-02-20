@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Copy, Check, ArrowRight, Sparkles, UserPlus } from 'lucide-react';
 import { supabase } from '../lib/supabase';
@@ -6,7 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import confetti from 'canvas-confetti';
 
 export default function CoupleConnect() {
-    const { user, profile } = useAuth(); // AuthContext should expose a way to refresh profile/couple
+    const { user } = useAuth(); // AuthContext should expose a way to refresh profile/couple
     const [mode, setMode] = useState('initial'); // initial, create, join
     const [code, setCode] = useState('');
     const [generatedCode, setGeneratedCode] = useState(null);

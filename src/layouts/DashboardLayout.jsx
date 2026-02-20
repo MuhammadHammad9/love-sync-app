@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import {
     Home as HomeIcon, MessageCircleHeart, Radio, Calendar,
@@ -28,7 +29,7 @@ import MemoriesGallery from '../components/MemoriesGallery';
 import { getTheme, MOOD_CONFIG } from '../lib/theme';
 
 const DashboardLayout = () => {
-    const { user, couple, profile, partnerProfile } = useAuth();
+    const { user, couple, profile } = useAuth();
     const [activeTab, setActiveTab] = useState('home');
     const [navHidden, setNavHidden] = useState(false);
 
@@ -88,9 +89,16 @@ const DashboardLayout = () => {
     }, [profile?.mood, couple?.streak_count, themeOverride]);
 
     // Dynamic Quote (Passed to Home)
-    const quote = useMemo(() => {
+    const [quote, setQuote] = useState(() => {
         const quotes = theme.quotes;
         return quotes[Math.floor(Math.random() * quotes.length)];
+    });
+
+    useEffect(() => {
+        const quotes = theme.quotes;
+        const nextQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        const t = setTimeout(() => setQuote(nextQuote), 0);
+        return () => clearTimeout(t);
     }, [theme]);
 
     return (
@@ -187,6 +195,7 @@ const DashboardLayout = () => {
 };
 
 // Extracted NavButton Helper
+// eslint-disable-next-line no-unused-vars
 const NavButton = ({ active, onClick, icon: Icon, label, theme }) => (
     <button
         onClick={onClick}

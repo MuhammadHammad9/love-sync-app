@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Sparkles, Mail, Lock, Shield, Users, Calendar, MessageCircle, Eye, EyeOff, X, ChevronRight, User, Upload, Image as ImageIcon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import confetti from 'canvas-confetti';
 
 export default function Auth() {
-    const { signInWithGoogle, signInWithEmail, signUpWithEmail, resendConfirmationEmail } = useAuth();
+    const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
     const [showAuth, setShowAuth] = useState(false);
     const [isLoggingIn, setIsLoggingIn] = useState(false);
     const [useEmail, setUseEmail] = useState(false);
@@ -18,8 +19,6 @@ export default function Auth() {
     const [avatarFile, setAvatarFile] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(null);
     const [error, setError] = useState('');
-    const [message, setMessage] = useState('');
-    const [showResend, setShowResend] = useState(false);
     const [focusedField, setFocusedField] = useState(null);
 
     // Password strength calculation
@@ -85,8 +84,6 @@ export default function Auth() {
         e.preventDefault();
         setIsLoggingIn(true);
         setError('');
-        setMessage('');
-        setShowResend(false);
 
         try {
             if (isSignUp) {
@@ -308,7 +305,6 @@ export default function Auth() {
                                 setUseEmail(false);
                                 setShowAuth(false);
                                 setError('');
-                                setMessage('');
                                 setUsername('');
                                 setAvatarFile(null);
                                 setAvatarPreview(null);
@@ -601,7 +597,6 @@ export default function Auth() {
                                     onClick={() => {
                                         setIsSignUp(!isSignUp);
                                         setError('');
-                                        setMessage('');
                                     }}
                                     className="hover:text-love-400 underline transition-colors font-medium"
                                 >

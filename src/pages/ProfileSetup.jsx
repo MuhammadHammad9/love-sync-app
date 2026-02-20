@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Heart, User, Upload, Image as ImageIcon, Sparkles, CheckCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';

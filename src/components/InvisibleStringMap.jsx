@@ -119,6 +119,7 @@ export default function InvisibleStringMap() {
         );
 
         return () => navigator.geolocation.clearWatch(watchId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [profile]);
 
     useEffect(() => {

@@ -37,7 +37,7 @@ class ErrorBoundary extends React.Component {
                             We encountered an unexpected error. Please try reloading the page.
                         </p>
 
-                        {process.env.NODE_ENV === 'development' && this.state.error && (
+                        {import.meta.env.DEV && this.state.error && (
                             <div className="text-left text-xs bg-slate-100 dark:bg-slate-900 p-4 rounded-lg overflow-auto max-h-48 font-mono text-slate-700 dark:text-slate-400">
                                 {this.state.error.toString()}
                             </div>

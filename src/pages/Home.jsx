@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -25,36 +26,36 @@ const Home = ({ theme, quote, onGameToggle }) => {
 
 
     // Fetch Game History
-    const fetchGameHistory = useCallback(async () => {
-        if (!couple?.id) return;
-        try {
-            const { data, error } = await supabase
-                .from('game_history')
-                .select('*')
-                .eq('couple_id', couple.id)
-                .order('played_at', { ascending: false })
-                .limit(5);
-
-            if (error) {
-                console.warn('Game history fetch error (table may not exist):', error.message);
-                return;
-            }
-            if (data) setGameHistory(data);
-        } catch (err) {
-            console.warn('Game history error:', err);
-        }
-    }, [couple?.id]);
-
     useEffect(() => {
+        const fetchGameHistory = async () => {
+            if (!couple?.id) return;
+            try {
+                const { data, error } = await supabase
+                    .from('game_history')
+                    .select('*')
+                    .eq('couple_id', couple.id)
+                    .order('played_at', { ascending: false })
+                    .limit(5);
+
+                if (error) {
+                    console.warn('Game history fetch error (table may not exist):', error.message);
+                    return;
+                }
+                if (data) setGameHistory(data);
+            } catch (err) {
+                console.warn('Game history error:', err);
+            }
+        };
+
         fetchGameHistory();
-    }, [fetchGameHistory]);
+    }, [couple?.id]);
 
     // Notify parent about Game Mode change (to hide/show Nav)
     useEffect(() => {
         onGameToggle?.(showGame);
     }, [showGame, onGameToggle]);
 
-    const handleTestCelebration = useCallback(() => {
+    const handleTestCelebration = () => {
 
         confetti({
             particleCount: 150,
@@ -63,7 +64,7 @@ const Home = ({ theme, quote, onGameToggle }) => {
             colors: ['#FFE400', '#FFBD00', '#E89400', '#FFCA6C', '#FDFFB8'],
             zIndex: 9999
         });
-    }, []);
+    };
 
     // Milestone Celebration (Run once on mount if applicable)
     useEffect(() => {
@@ -94,7 +95,7 @@ const Home = ({ theme, quote, onGameToggle }) => {
                     ← Back to Dashboard
                 </button>
                 <div className="flex-1 flex items-center justify-center">
-                    <TicTacToe onGameEnd={fetchGameHistory} onClose={() => setShowGame(false)} />
+                    <TicTacToe onClose={() => setShowGame(false)} />
                 </div>
             </div>
         );

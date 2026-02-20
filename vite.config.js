@@ -6,36 +6,41 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig({
   plugins: [
     react(),
-    // VitePWA({
-    //   registerType: 'autoUpdate',
-    //   includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
-    //   manifest: {
-    //     name: 'LoveSync',
-    //     short_name: 'LoveSync',
-    //     description: 'A dedicated space for your connection',
-    //     theme_color: '#000000',
-    //     icons: [
-    //       {
-    //         src: 'pwa-192x192.png',
-    //         sizes: '192x192',
-    //         type: 'image/png'
-    //       },
-    //       {
-    //         src: 'pwa-512x512.png',
-    //         sizes: '512x512',
-    //         type: 'image/png'
-    //       }
-    //     ]
-    //   }
-    // })
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      manifest: {
+        name: 'LoveSync',
+        short_name: 'LoveSync',
+        description: 'A dedicated space for your connection',
+        theme_color: '#000000',
+        icons: [
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          }
+        ]
+      },
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5000000
+      }
+    })
   ],
   build: {
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
-          ui: ['lucide-react', 'clsx', 'tailwind-merge'],
-          utils: ['canvas-confetti', '@supabase/supabase-js'],
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          animation: ['framer-motion'],
+          db: ['@supabase/supabase-js'],
+          ui: ['lucide-react', 'clsx', 'tailwind-merge', 'canvas-confetti'],
+          map: ['leaflet', 'react-leaflet']
         }
       }
     }

@@ -1,0 +1,128 @@
+
+> love-sync-app@0.0.0 lint
+> eslint .
+
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\AtmosphericBackground.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\BottomSheet.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\ContextualPoet.jsx
+  6:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\CoupleConnect.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u            no-unused-vars
+  9:19  error  'profile' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\DailyPrompts.jsx
+  134:25  error  'error' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  308:30  error  'err' is defined but never used                                                        no-unused-vars
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\Heartbeat.jsx
+    2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                no-unused-vars
+   11:23  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+   9 |     // Random physics for "explosion" calculated once
+  10 |     const { x, y } = useMemo(() => {
+> 11 |         const angle = Math.random() * 360;
+     |                       ^^^^^^^^^^^^^ Cannot call impure function
+  12 |         const velocity = 50 + Math.random() * 100;
+  13 |         return {
+  14 |             x: Math.cos(angle * (Math.PI / 180)) * velocity,                                                                                                                                                                                                                                                                                                                                                    react-hooks/purity
+   12:31  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+  10 |     const { x, y } = useMemo(() => {
+  11 |         const angle = Math.random() * 360;
+> 12 |         const velocity = 50 + Math.random() * 100;
+     |                               ^^^^^^^^^^^^^ Cannot call impure function
+  13 |         return {
+  14 |             x: Math.cos(angle * (Math.PI / 180)) * velocity,
+  15 |             y: Math.sin(angle * (Math.PI / 180)) * velocity                                                                                                                                                                                                                                                                                                                                      react-hooks/purity
+  138:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  136 |     useEffect(() => {
+  137 |         if (lastReceived) {
+> 138 |             setIsBeating(true);
+      |             ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  139 |             const timeout = setTimeout(() => setIsBeating(false), 3000);
+  140 |             return () => clearTimeout(timeout);
+  141 |         }  react-hooks/set-state-in-effect
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\InvisibleStringMap.jsx
+  122:8  warning  React Hook useEffect has a missing dependency: 'myLocation'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\MemoriesGallery.jsx
+  5:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\MoodSelector.jsx
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\NotificationDropdown.jsx
+  33:9   warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+  39:13  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/set-state-in-effect')
+  41:13  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/set-state-in-effect')
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\Profile.jsx
+  31:18  error  'error' is defined but never used  no-unused-vars
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\TelepathicDJ.jsx
+  77:9  error  Unreachable code  no-unreachable
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\common\PageTransition.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\components\common\TabPanel.jsx
+  7:36  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+   5 |
+   6 |     useEffect(() => {
+>  7 |         if (active && !hasVisited) setHasVisited(true);
+     |                                    ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+   8 |     }, [active, hasVisited]);
+   9 |
+  10 |     if (!hasVisited) return null;  react-hooks/set-state-in-effect
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\layouts\DashboardLayout.jsx
+  99:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+   97 |     useEffect(() => {
+   98 |         const quotes = theme.quotes;
+>  99 |         setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+      |         ^^^^^^^^ Avoid calling setState() directly within an effect
+  100 |     }, [theme]);
+  101 |
+  102 |     return (  react-hooks/set-state-in-effect
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\pages\Onboarding.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\src\pages\ProfileSetup.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+✖ 24 problems (20 errors, 4 warnings)
+  0 errors and 3 warnings potentially fixable with the `--fix` option.
+

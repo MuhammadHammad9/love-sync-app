@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { Moon, Sun, Clock, Volume2, Bell, Heart, Play, Pause, VolumeX } from 'lucide-react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SleepSync() {
@@ -33,6 +34,7 @@ export default function SleepSync() {
         fetchSleepSessions();
         fetchAlarmSettings();
         checkActiveSession();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.id]);
 
     // Alarm checker - runs every minute
@@ -55,6 +57,7 @@ export default function SleepSync() {
         const interval = setInterval(checkAlarm, 30000);
 
         return () => clearInterval(interval);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alarmSettings, isAlarmRinging]);
 
     const triggerAlarm = () => {

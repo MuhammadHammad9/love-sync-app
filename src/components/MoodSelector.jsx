@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Smile, Frown, Heart, Coffee, Moon, Sun, CloudRain } from 'lucide-react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';

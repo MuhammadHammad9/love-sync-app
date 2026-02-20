@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircleHeart, Lock, BellRing, Clock, Camera, CheckCircle, Flame, Image as ImageIcon, X, Download } from 'lucide-react';
+import { MessageCircleHeart, Lock, BellRing, Clock, Camera, CheckCircle, Image as ImageIcon, X, Download } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { generateDailyQuestion } from '../lib/gemini';
 import confetti from 'canvas-confetti';
@@ -112,7 +113,6 @@ export default function DailyPrompts() {
 
     // Identify which partner I am (A or B)
     const isPartnerA = couple?.partner_a === profileId;
-    const isPartnerB = couple?.partner_b === profileId;
     const myAnswerField = isPartnerA ? 'answer_a' : 'answer_b';
     const partnerAnswerField = isPartnerA ? 'answer_b' : 'answer_a';
     const myPhotoField = isPartnerA ? 'photo_a' : 'photo_b';
@@ -131,7 +131,7 @@ export default function DailyPrompts() {
             const today = `${year}-${month}-${day}`;
 
             // Fetch existing
-            let { data, error } = await supabase
+            let { data } = await supabase
                 .from('daily_prompts')
                 .select('*')
                 .eq('couple_id', coupleId)
@@ -160,7 +160,7 @@ export default function DailyPrompts() {
                     let questionText = null;
                     try {
                         questionText = await generateDailyQuestion();
-                    } catch (e) {
+                    } catch {
                         // Fallback silently if AI fails
                     }
 
@@ -243,6 +243,7 @@ export default function DailyPrompts() {
             .subscribe();
 
         return () => supabase.removeChannel(channel);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coupleId, profileId]);
 
     // Countdown Timer (11 PM - 12 AM)
@@ -304,7 +305,7 @@ export default function DailyPrompts() {
                         // Compress to JPEG 0.7 quality
                         const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
                         setSelectedImage(dataUrl);
-                    } catch (err) {
+                    } catch {
                         showNotification("Error", "Failed to process image. Try a different one.", "system");
                     } finally {
                         setProcessingImage(false);

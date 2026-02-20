@@ -28,7 +28,7 @@ export default function Profile({ theme, setThemeOverride, recentNotifications =
             await updateProfile({ username: newName });
             setIsEditingName(false);
             showNotification("Success", "Name updated successfully", "system");
-        } catch (error) {
+        } catch {
             showNotification("Error", "Error updating name", "system");
         }
     };

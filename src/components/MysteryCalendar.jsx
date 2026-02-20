@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { Calendar, MapPin, Clock, Lock, Unlock, Plus, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -15,7 +15,7 @@ const formatTimeLeft = (ms) => {
 };
 
 const EventCard = ({ event, theme }) => {
-    const [timeLeft, setTimeLeft] = useState(new Date(event.unlock_date).getTime() - Date.now());
+    const [timeLeft, setTimeLeft] = useState(() => new Date(event.unlock_date).getTime() - Date.now());
 
     useEffect(() => {
         const timer = setInterval(() => {

@@ -48,17 +48,25 @@ export default function TicTacToe({ onClose, onGameEnd }) {
         return () => {
             supabase.removeChannel(channel);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [couple?.id]);
 
-    useEffect(() => {
-        checkWinner(board);
-        if (!winner) {
-            setStatus(isMyTurn ? "Your Turn!" : "Partner's Turn...");
-        }
-    }, [board, isXNext]);
+    // Added saveGameResult and checkWinner above the useEffect
+    const isPartnerA = couple?.partner_a === user?.id;
 
-    // Safety check
-    if (!couple || !user) return <div className="p-4 text-white">Loading game...</div>;
+    const saveGameResult = async (winnerId) => {
+        try {
+            await supabase.from('game_history').insert([{
+                couple_id: couple.id,
+                winner_id: winnerId, // null for draw
+                game_type: 'tictactoe'
+            }]);
+            // Refresh dashboard history via broadcast or let App.jsx poll/subscribe
+            if (onGameEnd) onGameEnd();
+        } catch (err) {
+            console.error("Error saving game:", err);
+        }
+    };
 
     const checkWinner = async (currentBoard) => {
         for (let combo of WINNING_COMBINATIONS) {
@@ -82,25 +90,22 @@ export default function TicTacToe({ onClose, onGameEnd }) {
         if (!currentBoard.includes(null)) {
             setWinner('Draw');
             setStatus("It's a Draw! 🤝");
-            // Save Draw (Anyone can save, but let's say 'X' player saves to be safe, or just random)
-            // Simpler: Only current turn player saves if draw? No, let's make the "Host" (Partner A) save draws.
+            // Save Draw
             if (isPartnerA) await saveGameResult(null);
         }
     };
 
-    const saveGameResult = async (winnerId) => {
-        try {
-            await supabase.from('game_history').insert([{
-                couple_id: couple.id,
-                winner_id: winnerId, // null for draw
-                game_type: 'tictactoe'
-            }]);
-            // Refresh dashboard history via broadcast or let App.jsx poll/subscribe
-            if (onGameEnd) onGameEnd();
-        } catch (err) {
-            console.error("Error saving game:", err);
+    useEffect(() => {
+        checkWinner(board);
+        if (!winner) {
+            setStatus(isMyTurn ? "Your Turn!" : "Partner's Turn...");
         }
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [board, isXNext]);
+
+    // Safety check
+    if (!couple || !user) return <div className="p-4 text-white">Loading game...</div>;
+    // Function declarations moved up
 
     const handleTileClick = async (index) => {
         if (board[index] || winner || !isMyTurn) return;
@@ -131,7 +136,6 @@ export default function TicTacToe({ onClose, onGameEnd }) {
     };
 
     // Identify Partner A (Host logic for draws/resets if needed)
-    const isPartnerA = couple?.partner_a === user.id;
 
     return (
         <div className="flex flex-col items-center gap-6 p-6 rounded-[2rem] bg-black/60 backdrop-blur-xl border border-white/10 w-full max-w-sm mx-auto shadow-2xl relative overflow-hidden">

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import YouTube from 'react-youtube';
 import { Mic, Music, Play, Square, Upload, Radio, StopCircle, RefreshCw, Volume2, Inbox } from 'lucide-react';
 import { extractVideoID } from '../lib/youtube';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -73,7 +74,7 @@ export default function TelepathicDJ({ theme, djState, setDjState }) {
             .subscribe();
 
         return () => supabase.removeChannel(channel);
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [couple?.id, user?.id]);
 
 
@@ -138,7 +139,7 @@ export default function TelepathicDJ({ theme, djState, setDjState }) {
         try {
             // 1. Upload Voice Note
             const fileName = `${couple.id}/${Date.now()}_${voiceFile.name}`;
-            const { data: uploadData, error: uploadError } = await supabase.storage
+            const { error: uploadError } = await supabase.storage
                 .from('voice-notes')
                 .upload(fileName, voiceFile);
 

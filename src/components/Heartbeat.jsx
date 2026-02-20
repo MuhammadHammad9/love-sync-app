@@ -1,17 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Activity } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 
 // Small floating heart particle
-const HeartParticle = ({ id, onComplete }) => {
-    // Random physics for "explosion"
-    const angle = Math.random() * 360;
-    const velocity = 50 + Math.random() * 100;
-    const x = Math.cos(angle * (Math.PI / 180)) * velocity;
-    const y = Math.sin(angle * (Math.PI / 180)) * velocity;
-    const rotation = Math.random() * 360;
+const HeartParticle = ({ id, x, y, onComplete }) => {
 
     return (
         <motion.div
@@ -30,6 +25,7 @@ export default function Heartbeat() {
     const { profile, couple } = useAuth();
     const [lastReceived, setLastReceived] = useState(null);
     const [sending, setSending] = useState(false);
+    const [isBeating, setIsBeating] = useState(false);
 
     // Heat System: More taps = more intense glow/animation
     const [heat, setHeat] = useState(0);
@@ -50,6 +46,7 @@ export default function Heartbeat() {
             .on('broadcast', { event: 'heartbeat' }, (payload) => {
                 if (payload.sender_id !== profile.id) {
                     setLastReceived(Date.now());
+                    setIsBeating(true);
                     if (navigator.vibrate) navigator.vibrate([50, 40, 150]); // Intensified haptic
                 }
             })
@@ -95,9 +92,15 @@ export default function Heartbeat() {
 
         // Spawn particles (Prompt 3: Dopamine Burst)
         const burstCount = 6 + Math.floor(Math.random() * 4);
-        const newParticles = Array.from({ length: burstCount }).map((_) => ({
-            id: Math.random().toString(36).substr(2, 9),
-        }));
+        const newParticles = Array.from({ length: burstCount }).map(() => {
+            const angle = Math.random() * 360;
+            const velocity = 50 + Math.random() * 100;
+            return {
+                id: Math.random().toString(36).substr(2, 9),
+                x: Math.cos(angle * (Math.PI / 180)) * velocity,
+                y: Math.sin(angle * (Math.PI / 180)) * velocity
+            };
+        });
         setParticles(prev => [...prev, ...newParticles]);
 
         sendHeartbeat();
@@ -128,7 +131,13 @@ export default function Heartbeat() {
         }
     };
 
-    const isBeating = lastReceived && (Date.now() - lastReceived < 3000);
+
+    useEffect(() => {
+        if (isBeating) {
+            const timeout = setTimeout(() => setIsBeating(false), 3000);
+            return () => clearTimeout(timeout);
+        }
+    }, [isBeating]);
 
     // Dynamic Visuals based on Heat
     const glowSize = 40 + (heat * 5); // Glow expands with heat
@@ -177,7 +186,7 @@ export default function Heartbeat() {
             {/* Particle Layer */}
             <div className="absolute inset-0 pointer-events-none z-20">
                 {particles.map(p => (
-                    <HeartParticle key={p.id} id={p.id} onComplete={removeParticle} />
+                    <HeartParticle key={p.id} id={p.id} x={p.x} y={p.y} onComplete={removeParticle} />
                 ))}
             </div>
 

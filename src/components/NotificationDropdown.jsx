@@ -1,33 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { Bell, Heart, Radio, Shield, X, Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 
 export default function NotificationDropdown() {
-    const { user, notification, removeNotification, showNotification } = useAuth(); // getting realtime context
+    const { user, notification, removeNotification } = useAuth(); // getting realtime context
     const [isOpen, setIsOpen] = useState(false);
     const [items, setItems] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const dropdownRef = useRef(null);
 
-    const fetchNotifications = async () => {
-        const { data } = await supabase
-            .from('notifications')
-            .select('*')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(10);
-
-        if (data) {
-            setItems(data);
-            setUnreadCount(data.filter(n => !n.is_read).length);
-        }
-    };
-
     // Fetch initial notifications
     useEffect(() => {
         if (!user) return;
+
+        const fetchNotifications = async () => {
+            const { data } = await supabase
+                .from('notifications')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false })
+                .limit(10);
+
+            if (data) {
+                setItems(data);
+                setUnreadCount(data.filter(n => !n.is_read).length);
+            }
+        };
+
         fetchNotifications();
     }, [user, isOpen]); // Re-fetch on open to be sure
 
@@ -36,7 +37,6 @@ export default function NotificationDropdown() {
         if (notification) {
             setItems(prev => [notification, ...prev]);
             setUnreadCount(prev => prev + 1);
-            // Optional: Auto-open or just badges? Just badge usually better.
         }
     }, [notification]);
 
@@ -84,6 +84,7 @@ export default function NotificationDropdown() {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen, notification]);
 
     return (

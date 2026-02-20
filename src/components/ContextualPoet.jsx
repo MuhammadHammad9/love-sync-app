@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { generateContextualNote } from '../lib/gemini';
 import { Cloud, Sun, CloudRain, Wind, Sparkles, Feather, RefreshCw, AlertCircle } from 'lucide-react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
 export default function ContextualPoet() {

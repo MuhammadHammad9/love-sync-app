@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Heart, Key, Copy, ArrowRight, Loader } from 'lucide-react';
 import { supabase } from '../lib/supabase';
