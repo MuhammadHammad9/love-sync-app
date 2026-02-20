@@ -1,0 +1,45 @@
+
+> love-sync-app@0.0.0 build
+> vite build
+
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 2266 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mregisterSW.js                    [39m[1m[2m  0.13 kB[22m[1m[22m
+[2mdist/[22m[32mmanifest.webmanifest             [39m[1m[2m  0.35 kB[22m[1m[22m
+[2mdist/[22m[32mindex.html                       [39m[1m[2m  0.97 kB[22m[1m[22m[2m │ gzip:   0.46 kB[22m
+[2mdist/[22m[35massets/index-rjSlpf2Y.css        [39m[1m[2m 97.06 kB[22m[1m[22m[2m │ gzip:  18.61 kB[22m
+[2mdist/[22m[36massets/Onboarding-1KfcsuA1.js    [39m[1m[2m  4.74 kB[22m[1m[22m[2m │ gzip:   1.75 kB[22m
+[2mdist/[22m[36massets/ProfileSetup-DwcDZFiS.js  [39m[1m[2m  5.56 kB[22m[1m[22m[2m │ gzip:   2.24 kB[22m
+[2mdist/[22m[36massets/Auth-Fn00seZE.js          [39m[1m[2m 16.03 kB[22m[1m[22m[2m │ gzip:   4.81 kB[22m
+[2mdist/[22m[36massets/ui-DIMiao13.js            [39m[1m[2m 16.17 kB[22m[1m[22m[2m │ gzip:   5.90 kB[22m
+[2mdist/[22m[36massets/vendor-BZYaQHyI.js        [39m[1m[2m166.36 kB[22m[1m[22m[2m │ gzip:  55.65 kB[22m
+[2mdist/[22m[36massets/utils-CsqPS4kC.js         [39m[1m[2m178.01 kB[22m[1m[22m[2m │ gzip:  48.55 kB[22m
+[2mdist/[22m[36massets/index-h3MugqqB.js         [39m[1m[33m502.87 kB[39m[22m[2m │ gzip: 155.29 kB[22m
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 8.53s[39m
+[31merror during build:
+Error: Unable to write the service worker file. 'C:\Users\KHAASL~1\AppData\Local\Temp\d153d78f08b929df11f9264d031712b8\sw.js: Missing semicolon. (1:79)
+
+[0m[31m[1m>[22m[31m[90m 1 |[31m [36mimport[31m {clientsClaim [36mas[31m workbox_core_clientsClaim} [36mfrom[31m [32m'C:/Users/Khaas Laptop'[31ms[33m/[31m[33mOneDrive[31m [33m-[31m [33mHigher[31m [33mEducation[31m [33mCommission[31m[33m/[31m[33mDesktop[31m[33m/[31m[33mLOVE[31m[33m/[31mlove[33m-[31msync[33m-[31mapp[33m/[31mnode_modules[33m/[31mworkbox[33m-[31mcore[33m/[31mclientsClaim[33m.[31mmjs[32m';[31m
+ [90m   |[31m                                                                                [31m[1m^[22m[31m
+ [90m 2 |[31m [36mimport[31m {precacheAndRoute [36mas[31m workbox_precaching_precacheAndRoute} [36mfrom[31m [32m'C:/Users/Khaas Laptop'[31ms[33m/[31m[33mOneDrive[31m [33m-[31m [33mHigher[31m [33mEducation[31m [33mCommission[31m[33m/[31m[33mDesktop[31m[33m/[31m[33mLOVE[31m[33m/[31mlove[33m-[31msync[33m-[31mapp[33m/[31mnode_modules[33m/[31mworkbox[33m-[31mprecaching[33m/[31mprecacheAndRoute[33m.[31mmjs[32m';[31m
+ [90m 3 |[31m [36mimport[31m {cleanupOutdatedCaches [36mas[31m workbox_precaching_cleanupOutdatedCaches} [36mfrom[31m [32m'C:/Users/Khaas Laptop'[31ms[33m/[31m[33mOneDrive[31m [33m-[31m [33mHigher[31m [33mEducation[31m [33mCommission[31m[33m/[31m[33mDesktop[31m[33m/[31m[33mLOVE[31m[33m/[31mlove[33m-[31msync[33m-[31mapp[33m/[31mnode_modules[33m/[31mworkbox[33m-[31mprecaching[33m/[31mcleanupOutdatedCaches[33m.[31mmjs[32m';[31m
+ [90m 4 |[31m [36mimport[31m {registerRoute [36mas[31m workbox_routing_registerRoute} [36mfrom[31m [32m'C:/Users/Khaas Laptop'[31ms[33m/[31m[33mOneDrive[31m [33m-[31m [33mHigher[31m [33mEducation[31m [33mCommission[31m[33m/[31m[33mDesktop[31m[33m/[31m[33mLOVE[31m[33m/[31mlove[33m-[31msync[33m-[31mapp[33m/[31mnode_modules[33m/[31mworkbox[33m-[31mrouting[33m/[31mregisterRoute[33m.[31mmjs[32m';[31m[0m'
+    at writeSWUsingDefaultTemplate (C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\node_modules\workbox-build\build\lib\write-sw-using-default-template.js:68:15)
+    at async generateSW (C:\Users\Khaas Laptop's\OneDrive - Higher Education Commission\Desktop\LOVE\love-sync-app\node_modules\workbox-build\build\generate-sw.js:95:23)
+    at async generateServiceWorker (file:///C:/Users/Khaas%20Laptop's/OneDrive%20-%20Higher%20Education%20Commission/Desktop/LOVE/love-sync-app/node_modules/vite-plugin-pwa/dist/index.js:208:23)
+    at async _generateSW (file:///C:/Users/Khaas%20Laptop's/OneDrive%20-%20Higher%20Education%20Commission/Desktop/LOVE/love-sync-app/node_modules/vite-plugin-pwa/dist/index.js:234:5)
+    at async Object.handler (file:///C:/Users/Khaas%20Laptop's/OneDrive%20-%20Higher%20Education%20Commission/Desktop/LOVE/love-sync-app/node_modules/vite-plugin-pwa/dist/index.js:427:13)
+    at async PluginDriver.hookParallel (file:///C:/Users/Khaas%20Laptop's/OneDrive%20-%20Higher%20Education%20Commission/Desktop/LOVE/love-sync-app/node_modules/rollup/dist/es/shared/node-entry.js:22449:17)
+    at async Object.close (file:///C:/Users/Khaas%20Laptop's/OneDrive%20-%20Higher%20Education%20Commission/Desktop/LOVE/love-sync-app/node_modules/rollup/dist/es/shared/node-entry.js:23468:13)
+    at async buildEnvironment (file:///C:/Users/Khaas%20Laptop's/OneDrive%20-%20Higher%20Education%20Commission/Desktop/LOVE/love-sync-app/node_modules/vite/dist/node/chunks/config.js:33555:15)
+    at async Object.build (file:///C:/Users/Khaas%20Laptop's/OneDrive%20-%20Higher%20Education%20Commission/Desktop/LOVE/love-sync-app/node_modules/vite/dist/node/chunks/config.js:33900:19)
+    at async Object.buildApp (file:///C:/Users/Khaas%20Laptop's/OneDrive%20-%20Higher%20Education%20Commission/Desktop/LOVE/love-sync-app/node_modules/vite/dist/node/chunks/config.js:33897:153)
+    at async CAC.<anonymous> (file:///C:/Users/Khaas%20Laptop's/OneDrive%20-%20Higher%20Education%20Commission/Desktop/LOVE/love-sync-app/node_modules/vite/dist/node/cli.js:629:3)[39m
