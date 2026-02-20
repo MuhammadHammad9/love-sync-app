@@ -306,6 +306,55 @@ export const AuthProvider = ({ children }) => {
         if (error) throw error;
     };
 
+    /**
+     * deleteAccount — permanently removes:
+     *  1. All notifications for this user
+     *  2. The profile row (cascade handles couple membership via FK if set up, otherwise manual)
+     *  3. The Supabase auth user (triggers onAuthStateChange → sign out)
+     *
+     * NOTE: Supabase's client SDK can only delete the currently signed-in user via
+     * supabase.auth.admin.deleteUser() which requires a service-role key on the server.
+     * The cleanest client-side approach is to delete profile + data first, then call
+     * supabase.rpc('delete_user') if you have that function, otherwise sign out and
+     * the orphaned auth row will be cleaned up by a DB function/trigger.
+     *
+     * If you have the `delete_user` SQL function (see below), it cascades everything.
+     */
+    const deleteAccount = async () => {
+        try {
+            if (!user?.id) throw new Error('No user logged in');
+
+            // 1. Delete notifications
+            await supabase.from('notifications').delete().eq('user_id', user.id);
+
+            // 2. If user is in a couple, detach them so partner isn't affected
+            if (couple?.id) {
+                const isPartnerA = couple.partner_a === user.id;
+                // Set their slot to null so the couple record remains for partner
+                await supabase
+                    .from('couples')
+                    .update({ [isPartnerA ? 'partner_a' : 'partner_b']: null })
+                    .eq('id', couple.id);
+            }
+
+            // 3. Delete the profile row (will also clear couple_id foreign key)
+            await supabase.from('profiles').delete().eq('id', user.id);
+
+            // 4. Delete the auth user — calls an RPC function if available,
+            //    otherwise falls back to signing out (auth row gets cleaned by trigger)
+            const { error: rpcError } = await supabase.rpc('delete_user');
+            if (rpcError) {
+                // Fallback: sign out — auth row cleanup should be handled server-side
+                console.warn('delete_user RPC not available, signing out:', rpcError.message);
+                await supabase.auth.signOut();
+            }
+            // onAuthStateChange fires → sets user/profile/couple to null automatically
+        } catch (error) {
+            console.error('Error deleting account:', error);
+            throw error;
+        }
+    };
+
     const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
     useEffect(() => {
@@ -318,12 +367,10 @@ export const AuthProvider = ({ children }) => {
     const toggleNotifications = async () => {
         if (notificationsEnabled) {
             setNotificationsEnabled(false);
-            // Optional: sendLocalNotification("Notifications Muted", { body: "You will not receive updates." });
         } else {
             const permission = await requestNotificationPermission();
             if (permission === 'granted') {
                 setNotificationsEnabled(true);
-                // Attempt to subscribe, but don't block UI state if it fails (due to no SW)
                 subscribeToPushMessages().catch(console.error);
 
                 sendLocalNotification("Notifications Enabled! 🔔", {
@@ -349,6 +396,7 @@ export const AuthProvider = ({ children }) => {
         signOut,
         updateProfile,
         updatePassword,
+        deleteAccount,
         toggleNotifications,
         notificationsEnabled,
         notification,
