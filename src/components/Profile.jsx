@@ -199,7 +199,7 @@ export default function Profile({ theme, setThemeOverride, recentNotifications =
                 )}
             </AnimatePresence>
 
-            <div className="flex flex-col h-full p-6 space-y-6 overflow-y-auto pb-24">
+            <div className="flex flex-col h-full p-6 space-y-6 overflow-y-auto pb-40">
                 {/* Header / Avatar */}
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
