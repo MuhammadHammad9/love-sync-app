@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
-// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import {
     Home as HomeIcon, MessageCircleHeart, Radio, Calendar,
@@ -102,7 +101,7 @@ const DashboardLayout = () => {
     }, [theme]);
 
     return (
-        <div className={`min-h-screen relative flex flex-col transition-colors duration-1000 ease-in-out`}>
+        <div className="min-h-screen relative flex flex-col transition-colors duration-1000 ease-in-out">
             {/* Background Elements */}
             <AtmosphericBackground theme={theme} />
             {theme.id === 'milestone' && <GoldenParticles />}
@@ -116,7 +115,6 @@ const DashboardLayout = () => {
             <main className="flex-1 overflow-y-auto w-full max-w-md mx-auto p-6 scrollbar-hide relative z-10">
 
                 <TabPanel active={activeTab === 'home'}>
-                    {/* Home wraps itself in PageTransition */}
                     <Home
                         theme={theme}
                         quote={quote}
@@ -143,7 +141,6 @@ const DashboardLayout = () => {
                 </TabPanel>
 
                 <TabPanel active={activeTab === 'notes'}>
-                    {/* Serenade wraps itself in PageTransition */}
                     <Serenade />
                 </TabPanel>
 
@@ -194,18 +191,29 @@ const DashboardLayout = () => {
     );
 };
 
-// Extracted NavButton Helper
+// Nav button with sliding active pill (layoutId)
 // eslint-disable-next-line no-unused-vars
 const NavButton = ({ active, onClick, icon: Icon, label, theme }) => (
-    <button
+    <motion.button
         onClick={onClick}
-        className={`group relative p-2 rounded-xl transition-all ${active ? `bg-white/10 ${theme.textColor}` : 'text-white/40 hover:text-white/70'}`}
+        whileTap={{ scale: 0.82 }}
+        className={`group relative p-2 rounded-xl transition-colors ${active ? theme.textColor : 'text-white/40 hover:text-white/70'
+            }`}
     >
+        {/* Sliding active pill — shared layoutId across all NavButtons */}
+        {active && (
+            <motion.div
+                layoutId="nav-active-pill"
+                className="absolute inset-0 rounded-xl bg-white/10"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+            />
+        )}
+        {/* Tooltip */}
         <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-black/80 backdrop-blur-md rounded-lg text-[10px] text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-white/5">
             {label}
         </div>
-        <Icon className="w-6 h-6" />
-    </button>
+        <Icon className="w-6 h-6 relative z-10" />
+    </motion.button>
 );
 
 export default DashboardLayout;
