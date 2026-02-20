@@ -567,7 +567,6 @@ export default function Auth() {
                                                 id="avatar-upload"
                                                 type="file"
                                                 accept="image/*"
-                                                required={isSignUp}
                                                 onChange={handleAvatarChange}
                                                 className="hidden"
                                                 aria-label="Upload profile picture"
