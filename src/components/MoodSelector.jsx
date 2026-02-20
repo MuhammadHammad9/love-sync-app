@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Smile, Frown, Heart, Coffee, Moon, Sun, CloudRain } from 'lucide-react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 
 const MOODS = [
@@ -16,7 +15,7 @@ const MOODS = [
 ];
 
 export default function MoodSelector() {
-    const { profile } = useAuth();
+    const { profile, updateProfile } = useAuth();
     const [currentMood, setCurrentMood] = useState(null);
     const [isSelecting, setIsSelecting] = useState(false);
 
@@ -31,12 +30,9 @@ export default function MoodSelector() {
         setIsSelecting(false);
 
         try {
-            const { error } = await supabase
-                .from('profiles')
-                .update({ mood: mood.id })
-                .eq('id', profile.id);
-
-            if (error) throw error;
+            // updateProfile updates Supabase AND immediately patches the local
+            // profile state in AuthContext — so the theme changes instantly.
+            await updateProfile({ mood: mood.id });
         } catch (err) {
             console.error('Error updating mood:', err);
         }
