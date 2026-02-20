@@ -12,7 +12,7 @@ export const generateDailyQuestion = async () => {
     }
 
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = "Generate a single, short, deep, and romantic question for a couple to ask each other. It should be suitable for a daily relationship prompt. Just return the question text, no quotes or extra text.";
 
@@ -49,7 +49,7 @@ export const generateContextualNote = async (weather, partnerMood, randomMemory)
     if (!API_KEY) return null;
 
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const systemPrompt = `
 Role: You are a deeply in love partner, not an AI.
