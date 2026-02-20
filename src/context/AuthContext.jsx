@@ -327,7 +327,7 @@ export const AuthProvider = ({ children }) => {
             // 1. Delete notifications
             await supabase.from('notifications').delete().eq('user_id', user.id);
 
-            // 2. If user is in a couple, detach them so partner isn't affected
+            // 2. Detach from couple so partner isn't affected
             if (couple?.id) {
                 const isPartnerA = couple.partner_a === user.id;
                 await supabase
@@ -339,16 +339,13 @@ export const AuthProvider = ({ children }) => {
             // 3. Delete the profile row
             await supabase.from('profiles').delete().eq('id', user.id);
 
-            // 4. Attempt RPC deletion — ignore if function doesn't exist in Supabase
-            try { await supabase.rpc('delete_user'); } catch (_) { /* not set up — that's ok */ }
-
-            // 5. Always sign out — ensures the session is cleared
+            // 4. Sign out — clears the session
             await supabase.auth.signOut();
 
-            // 6. Set a flag so the Auth page shows a success notification
+            // 5. Tell the Auth page to show a success banner
             localStorage.setItem('account_deleted', 'true');
 
-            // 7. Hard redirect — bypasses React Router so no stale state issues
+            // 6. Hard redirect so no stale React state lingers
             window.location.replace('/auth');
         } catch (error) {
             console.error('Error deleting account:', error);
