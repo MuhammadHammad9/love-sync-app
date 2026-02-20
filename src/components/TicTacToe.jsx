@@ -21,7 +21,8 @@ export default function TicTacToe({ onClose, onGameEnd }) {
 
     // Player IDs
     // Logic: Sort IDs to determine who is X and who is O consistently
-    const sortedIds = (user && couple) ? [user.id, couple.partner_id || (couple.partner_b === user.id ? couple.partner_a : couple.partner_b)].sort() : [];
+    const partnerId = couple?.partner_a === user?.id ? couple?.partner_b : couple?.partner_a;
+    const sortedIds = (user && couple && partnerId) ? [user.id, partnerId].sort() : [];
     const mySymbol = (sortedIds.length > 0 && user?.id === sortedIds[0]) ? 'X' : 'O';
     const isMyTurn = (isXNext && mySymbol === 'X') || (!isXNext && mySymbol === 'O');
 
