@@ -321,36 +321,46 @@ export const AuthProvider = ({ children }) => {
      * If you have the `delete_user` SQL function (see below), it cascades everything.
      */
     const deleteAccount = async () => {
-        try {
-            if (!user?.id) throw new Error('No user logged in');
+        if (!user?.id) throw new Error('No user logged in');
 
-            // 1. Delete notifications
-            await supabase.from('notifications').delete().eq('user_id', user.id);
+        // 1. Delete notifications (non-fatal if fails)
+        const { error: notifError } = await supabase
+            .from('notifications')
+            .delete()
+            .eq('user_id', user.id);
+        if (notifError) console.warn('Could not delete notifications:', notifError.message);
 
-            // 2. Detach from couple so partner isn't affected
-            if (couple?.id) {
-                const isPartnerA = couple.partner_a === user.id;
-                await supabase
-                    .from('couples')
-                    .update({ [isPartnerA ? 'partner_a' : 'partner_b']: null })
-                    .eq('id', couple.id);
-            }
-
-            // 3. Delete the profile row
-            await supabase.from('profiles').delete().eq('id', user.id);
-
-            // 4. Sign out — clears the session
-            await supabase.auth.signOut();
-
-            // 5. Tell the Auth page to show a success banner
-            localStorage.setItem('account_deleted', 'true');
-
-            // 6. Hard redirect so no stale React state lingers
-            window.location.replace('/auth');
-        } catch (error) {
-            console.error('Error deleting account:', error);
-            throw error;
+        // 2. Detach from couple so partner isn't affected
+        if (couple?.id) {
+            const isPartnerA = couple.partner_a === user.id;
+            const { error: coupleError } = await supabase
+                .from('couples')
+                .update({ [isPartnerA ? 'partner_a' : 'partner_b']: null })
+                .eq('id', couple.id);
+            if (coupleError) console.warn('Could not detach from couple:', coupleError.message);
         }
+
+        // 3. Delete the profile row — FATAL: if this fails, throw so the user sees the error
+        const { error: profileError } = await supabase
+            .from('profiles')
+            .delete()
+            .eq('id', user.id);
+        if (profileError) {
+            throw new Error(
+                profileError.code === '42501'
+                    ? 'Permission denied. Please add a DELETE RLS policy on the profiles table in Supabase.'
+                    : `Failed to delete profile: ${profileError.message}`
+            );
+        }
+
+        // 4. Sign out — clears the session
+        await supabase.auth.signOut();
+
+        // 5. Tell the Auth page to show a success banner
+        localStorage.setItem('account_deleted', 'true');
+
+        // 6. Hard redirect so no stale React state lingers
+        window.location.replace('/auth');
     };
 
     const [notificationsEnabled, setNotificationsEnabled] = useState(false);
