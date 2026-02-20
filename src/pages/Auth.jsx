@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sparkles, Mail, Lock, Shield, Users, Calendar, MessageCircle, Eye, EyeOff, X, ChevronRight, User, Upload, Image as ImageIcon } from 'lucide-react';
+import { Heart, Sparkles, Mail, Lock, Shield, Users, Calendar, MessageCircle, Eye, EyeOff, X, ChevronRight, User, Upload, Image as ImageIcon, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import confetti from 'canvas-confetti';
 
@@ -20,6 +20,17 @@ export default function Auth() {
     const [avatarPreview, setAvatarPreview] = useState(null);
     const [error, setError] = useState('');
     const [focusedField, setFocusedField] = useState(null);
+    const [deletedSuccess, setDeletedSuccess] = useState(false);
+
+    // Show success banner if redirected after account deletion
+    useEffect(() => {
+        if (localStorage.getItem('account_deleted') === 'true') {
+            setDeletedSuccess(true);
+            localStorage.removeItem('account_deleted');
+            const t = setTimeout(() => setDeletedSuccess(false), 5000);
+            return () => clearTimeout(t);
+        }
+    }, []);
 
     // Password strength calculation
     const getPasswordStrength = (pwd) => {
@@ -340,6 +351,17 @@ export default function Auth() {
 
                     {/* Error/Success Messages */}
                     <AnimatePresence>
+                        {deletedSuccess && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                className="p-4 bg-green-500/10 border border-green-500/30 text-green-300 text-sm rounded-xl flex items-start gap-2"
+                            >
+                                <Check className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                                <span>Account deleted successfully. Sorry to see you go 💔</span>
+                            </motion.div>
+                        )}
                         {error && (
                             <motion.div
                                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -353,7 +375,6 @@ export default function Auth() {
                                 <span>{error}</span>
                             </motion.div>
                         )}
-
                     </AnimatePresence>
 
                     {/* Auth Options */}

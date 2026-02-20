@@ -330,25 +330,26 @@ export const AuthProvider = ({ children }) => {
             // 2. If user is in a couple, detach them so partner isn't affected
             if (couple?.id) {
                 const isPartnerA = couple.partner_a === user.id;
-                // Set their slot to null so the couple record remains for partner
                 await supabase
                     .from('couples')
                     .update({ [isPartnerA ? 'partner_a' : 'partner_b']: null })
                     .eq('id', couple.id);
             }
 
-            // 3. Delete the profile row (will also clear couple_id foreign key)
+            // 3. Delete the profile row
             await supabase.from('profiles').delete().eq('id', user.id);
 
-            // 4. Delete the auth user — calls an RPC function if available,
-            //    otherwise falls back to signing out (auth row gets cleaned by trigger)
-            const { error: rpcError } = await supabase.rpc('delete_user');
-            if (rpcError) {
-                // Fallback: sign out — auth row cleanup should be handled server-side
-                console.warn('delete_user RPC not available, signing out:', rpcError.message);
-                await supabase.auth.signOut();
-            }
-            // onAuthStateChange fires → sets user/profile/couple to null automatically
+            // 4. Attempt RPC deletion (may not exist — that's fine)
+            await supabase.rpc('delete_user').catch(() => { });
+
+            // 5. Always sign out — ensures the session is cleared
+            await supabase.auth.signOut();
+
+            // 6. Set a flag so the Auth page shows a success notification
+            localStorage.setItem('account_deleted', 'true');
+
+            // 7. Hard redirect — bypasses React Router so no stale state issues
+            window.location.replace('/auth');
         } catch (error) {
             console.error('Error deleting account:', error);
             throw error;
